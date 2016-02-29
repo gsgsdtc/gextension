@@ -1,6 +1,7 @@
 package cn.gsgsoft.gextension.annotation;
 
-import cn.gsgsoft.gextend.annotation.SPIParam;
+import cn.gsgsoft.gextension.annotation.SPI;
+import cn.gsgsoft.gextension.annotation.SPIParam;
 
 /**
  * mock

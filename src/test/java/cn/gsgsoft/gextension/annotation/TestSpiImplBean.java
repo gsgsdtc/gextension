@@ -5,9 +5,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import cn.gsgsoft.gextend.annotation.SPIBean;
-import cn.gsgsoft.gextend.annotation.SPIImplBean;
-import cn.gsgsoft.gextend.annotation.SPIParamBean;
+import cn.gsgsoft.gextension.annotation.SPIBean;
+import cn.gsgsoft.gextension.annotation.SPIImplBean;
+import cn.gsgsoft.gextension.annotation.SPIParamBean;
 
 /**
  *  测试
@@ -27,11 +27,13 @@ public class TestSpiImplBean {
 		Assert.assertEquals("setName", nameBean.getMethod().getName());
 		Assert.assertEquals("alias", nameBean.getName());
 		Assert.assertEquals(true, nameBean.isChange());
+		Assert.assertEquals(MockSpiImpl.class, nameBean.getValueType());
 		
 		SPIParamBean passwordBean = getBean(bean.getParams(), "password");
 		Assert.assertEquals("setPassword", passwordBean.getMethod().getName());
 		Assert.assertEquals("password", passwordBean.getName());
 		Assert.assertEquals(false, passwordBean.isChange());
+		Assert.assertNull(passwordBean.getValueType());
 		
 		SPIParamBean roleBean = getBean(bean.getParams(), "role");
 		Assert.assertEquals("setRole", roleBean.getMethod().getName());

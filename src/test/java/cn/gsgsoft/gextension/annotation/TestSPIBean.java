@@ -3,10 +3,10 @@ package cn.gsgsoft.gextension.annotation;
 import org.junit.Assert;
 import org.junit.Test;
 
-import cn.gsgsoft.gextend.annotation.SPI;
-import cn.gsgsoft.gextend.annotation.SPIBean;
-import cn.gsgsoft.gextend.exception.GExtensionException;
-import cn.gsgsoft.gextend.utils.AnnotationUtils;
+import cn.gsgsoft.gextension.annotation.SPI;
+import cn.gsgsoft.gextension.annotation.SPIBean;
+import cn.gsgsoft.gextension.exception.GExtensionException;
+import cn.gsgsoft.gextension.utils.AnnotationUtils;
 
 /**
  * 
@@ -19,8 +19,9 @@ public class TestSPIBean {
 	@Test
 	public void test(){
 		SPIBean bean = new SPIBean(MockSPIInterface.class);
-		Assert.assertEquals("gextend.mockspi", bean.getName());
-		Assert.assertEquals("gextend", bean.getDef());
+		Assert.assertEquals("gextension.mockspi", bean.getName());
+		Assert.assertEquals("gextension", bean.getDef());
+		Assert.assertTrue(bean.getMultiImp());
 	}
 	
 	/**
@@ -30,7 +31,7 @@ public class TestSPIBean {
 	public void testNoAnnotaionConfig(){
 		try{
 			SPIBean bean = new SPIBean(TestSPIBean.class);
-			Assert.assertEquals("gextend.mockspi", bean.getName());
+			Assert.assertEquals("gextension.mockspi", bean.getName());
 		}catch(GExtensionException ex){
 			Assert.assertTrue(ex instanceof GExtensionException);
 		}
@@ -40,7 +41,7 @@ public class TestSPIBean {
 	@Test
 	public void testAnnotationUtils(){
 		SPI spi = AnnotationUtils.getAnnotation(MockSPIInterface.class,SPI.class );
-		Assert.assertEquals("gextend.mockspi", spi.name());
+		Assert.assertEquals("gextension.mockspi", spi.name());
 	}
 	
 	

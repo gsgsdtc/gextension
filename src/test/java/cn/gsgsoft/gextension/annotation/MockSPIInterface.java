@@ -1,14 +1,14 @@
 package cn.gsgsoft.gextension.annotation;
 
-import cn.gsgsoft.gextend.annotation.SPI;
-import cn.gsgsoft.gextend.annotation.SPIParam;
+import cn.gsgsoft.gextension.annotation.SPI;
+import cn.gsgsoft.gextension.annotation.SPIParam;
 
 /**
  * 
  * @author guosg
  *
  */
-@SPI(name="gextend.mockspi",def="gextend")
+@SPI(name="gextension.mockspi",def="gextension",multiImp=true)
 public interface MockSPIInterface {
 	
 	@SPIParam

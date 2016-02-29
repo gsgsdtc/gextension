@@ -5,10 +5,10 @@ import java.math.BigDecimal;
 import org.junit.Assert;
 import org.junit.Test;
 
-import cn.gsgsoft.gextend.config.PropertiesAppConfigManager;
-import cn.gsgsoft.gextend.extension.SPIExtensionLoader;
-import cn.gsgsoft.gextension.extension.DefaultMockExtension;
-import cn.gsgsoft.gextension.extension.MockExtension;
+import cn.gsgsoft.gextension.DefaultMockExtension;
+import cn.gsgsoft.gextension.MockExtension;
+import cn.gsgsoft.gextension.appconfig.PropertiesAppConfigManager;
+import cn.gsgsoft.gextension.spi.SPIExtensionLoader;
 
 /**
  * 

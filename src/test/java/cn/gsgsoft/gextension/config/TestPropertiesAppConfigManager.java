@@ -3,10 +3,11 @@ package cn.gsgsoft.gextension.config;
 import org.junit.Assert;
 import org.junit.Test;
 
-import cn.gsgsoft.gextend.config.PropertiesAppConfigManager;
+import cn.gsgsoft.gextension.appconfig.PropertiesAppConfigManager;
+
 
 /**
- * 
+ * 测试加载appconfig.properties
  * @author guosg
  *
  */
