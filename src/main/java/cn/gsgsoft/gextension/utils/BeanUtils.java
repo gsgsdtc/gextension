@@ -54,7 +54,12 @@ public class BeanUtils {
 				Number.class.isAssignableFrom(clazz) ||
 				Date.class.isAssignableFrom(clazz) ||
 				clazz.equals(URI.class) || clazz.equals(URL.class) ||
-				clazz.equals(Locale.class) || clazz.equals(Class.class);
+				clazz.equals(Locale.class) || clazz.equals(Class.class) || clazz.equals(int.class)
+				 || clazz.equals(long.class)
+				 || clazz.equals(short.class)
+				 || clazz.equals(byte.class)
+				 || clazz.equals(char.class)
+				 || clazz.equals(double.class);
 	}
 
 	

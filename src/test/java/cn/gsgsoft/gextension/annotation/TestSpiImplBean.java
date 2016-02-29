@@ -20,20 +20,19 @@ public class TestSpiImplBean {
 	public void test(){
 		SPIImplBean bean = new SPIImplBean(MockSpiImpl.class);
 		SPIBean spi = bean.getSpiBean();
-		Assert.assertEquals("gextend.mockspi", spi.getName());
-		Assert.assertEquals("gextend", spi.getDef());
+		Assert.assertEquals("gextension.mockspi", spi.getName());
+		Assert.assertEquals("gextension", spi.getDef());
 		Assert.assertEquals(3, bean.getParams().size());
 		SPIParamBean nameBean = getBean(bean.getParams(), "alias");
 		Assert.assertEquals("setName", nameBean.getMethod().getName());
 		Assert.assertEquals("alias", nameBean.getName());
 		Assert.assertEquals(true, nameBean.isChange());
-		Assert.assertEquals(MockSpiImpl.class, nameBean.getValueType());
+		Assert.assertEquals(String.class, nameBean.getValueType());
 		
 		SPIParamBean passwordBean = getBean(bean.getParams(), "password");
 		Assert.assertEquals("setPassword", passwordBean.getMethod().getName());
 		Assert.assertEquals("password", passwordBean.getName());
 		Assert.assertEquals(false, passwordBean.isChange());
-		Assert.assertNull(passwordBean.getValueType());
 		
 		SPIParamBean roleBean = getBean(bean.getParams(), "role");
 		Assert.assertEquals("setRole", roleBean.getMethod().getName());

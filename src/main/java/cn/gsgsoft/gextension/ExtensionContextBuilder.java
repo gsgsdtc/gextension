@@ -20,7 +20,7 @@ public class ExtensionContextBuilder {
 	
 	public ExtensionContext build(){
 		ExtensionContext extensionContext = new ExtensionContext();
-		SPIExtensionLoader loader = new SPIExtensionLoader(new PropertiesAppConfigManager());
+		SPIExtensionLoader loader = new SPIExtensionLoader(PropertiesAppConfigManager.getInstance());
 		extensionContext.addExtensionLoader(loader);
 		extensionContext.initialize();
 		ExtensionContextUtils.setExtensionLoader(extensionContext);

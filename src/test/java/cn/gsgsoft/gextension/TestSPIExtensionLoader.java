@@ -19,7 +19,7 @@ public class TestSPIExtensionLoader {
 	
 	@Test
 	public void test(){
-		SPIExtensionLoader loader = new SPIExtensionLoader(new PropertiesAppConfigManager());
+		SPIExtensionLoader loader = new SPIExtensionLoader(PropertiesAppConfigManager.getInstance());
 		ExtensionContext context = new ExtensionContext();
 		context.addExtensionLoader(loader);
 		loader.setExtensionContext(context);
@@ -35,7 +35,7 @@ public class TestSPIExtensionLoader {
 	
 	@Test
 	public void testMultiImpl(){
-		SPIExtensionLoader loader = new SPIExtensionLoader(new PropertiesAppConfigManager());
+		SPIExtensionLoader loader = new SPIExtensionLoader(PropertiesAppConfigManager.getInstance());
 		ExtensionContext context = new ExtensionContext();
 		context.addExtensionLoader(loader);
 		loader.setExtensionContext(context);

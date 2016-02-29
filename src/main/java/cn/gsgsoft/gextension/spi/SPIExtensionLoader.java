@@ -187,7 +187,7 @@ public class SPIExtensionLoader implements ExtensionLoader{
 				throw new GExtensionException("扩展点"+spiName
 						+"的实现"+implName 
 						+"的实现类"+obj.getClass()
-						+"的方法"+spiParam.getMethod().getName()+"异常"+ex.getMessage());
+						+"的方法"+spiParam.getMethod().getName()+"异常:"+ex.getMessage(),ex);
 			}
 		}
 	}

@@ -22,7 +22,7 @@ public class TestExtensionConfigBean {
 	@Test
 	public void test(){
 		SpiExtensionConfigBean bean = SpiExtensionConfigBean.getInstance();
-		Assert.assertEquals("cn.gsgsoft.gextension.appconfig.PropertiesAppConfigLoader", bean.getExtensionImpl("gextension.appconfig.loader", "propertes"));
+		Assert.assertEquals("cn.gsgsoft.gextension.appconfig.PropertiesAppConfigLoader", bean.getExtensionImpl("gextension.appconfig.loader", "properties"));
 	}
 	
 	/**
@@ -33,7 +33,7 @@ public class TestExtensionConfigBean {
 	public void testPropertiesLoad() throws IOException{
 		
 		Properties props = PropertiesLoaderUtils.loadDictoryAllProperties(SpiExtensionConfigBean.extension_config_dic, null);
-		String s = props.getProperty("gextension.appconfig.loader.propertes");
+		String s = props.getProperty("gextension.appconfig.loader.properties");
 		Assert.assertEquals("cn.gsgsoft.gextension.appconfig.PropertiesAppConfigLoader", s);
 		
 	}
@@ -44,12 +44,12 @@ public class TestExtensionConfigBean {
 	public void testSplitPointName(){
 		String pn;//extension point name
 		String in;//impl name
-		String n = "gextend.extension_config.propertes";
+		String n = "gextend.extension_config.properties";
 		int i = n.lastIndexOf(".");
 		pn = n.substring(0,i);
 		in = n.substring(i+1);
 		
 		Assert.assertEquals("gextend.extension_config", pn);
-		Assert.assertEquals("propertes", in);
+		Assert.assertEquals("properties", in);
 	}
 }

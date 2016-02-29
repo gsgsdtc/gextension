@@ -20,7 +20,7 @@ public class ExtendableAppConfigManager extends AbstractAppConfigManager impleme
 	}
 	
 	protected void init() {
-		PropertiesAppConfigManager configManager = new PropertiesAppConfigManager();
+		PropertiesAppConfigManager configManager = PropertiesAppConfigManager.getInstance();
 		
 		SPIExtensionLoader extensionLoader = new SPIExtensionLoader(configManager);
 		
@@ -45,7 +45,7 @@ public class ExtendableAppConfigManager extends AbstractAppConfigManager impleme
 		return manager;
 	}
 	
-	public static synchronized void instantiate(){
+	private static synchronized void instantiate(){
 		if(manager==null){
 			manager=new ExtendableAppConfigManager();
 		}

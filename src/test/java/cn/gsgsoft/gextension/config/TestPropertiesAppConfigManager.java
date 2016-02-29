@@ -15,7 +15,7 @@ public class TestPropertiesAppConfigManager {
 	
 	@Test
 	public void test(){
-		PropertiesAppConfigManager m = new PropertiesAppConfigManager();
+		PropertiesAppConfigManager m = PropertiesAppConfigManager.getInstance();
 		Assert.assertEquals("impl", m.getValue("gextension.mock.properties_load"));
 	}
 }
