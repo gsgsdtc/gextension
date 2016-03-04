@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import cn.gsgsoft.gextension.annotation.SPI;
 import cn.gsgsoft.gextension.annotation.SPIBean;
-import cn.gsgsoft.gextension.exception.GExtensionException;
+import cn.gsgsoft.gextension.exception.ExtensionException;
 import cn.gsgsoft.gextension.utils.AnnotationUtils;
 
 /**
@@ -32,8 +32,8 @@ public class TestSPIBean {
 		try{
 			SPIBean bean = new SPIBean(TestSPIBean.class);
 			Assert.assertEquals("gextension.mockspi", bean.getName());
-		}catch(GExtensionException ex){
-			Assert.assertTrue(ex instanceof GExtensionException);
+		}catch(ExtensionException ex){
+			Assert.assertTrue(ex instanceof ExtensionException);
 		}
 		
 	}

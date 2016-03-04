@@ -1,7 +1,8 @@
 package cn.gsgsoft.gextension.utils;
 
 import cn.gsgsoft.gextension.ExtensionContext;
-import cn.gsgsoft.gextension.exception.GExtensionException;
+import cn.gsgsoft.gextension.exception.ExtensionException;
+import cn.gsgsoft.gextension.exception.GexExceptionContract;
 
 /**
  * 扩展点工具类
@@ -18,7 +19,7 @@ public class ExtensionContextUtils {
 	 */
 	public static ExtensionContext getExtensionLoader(){
 		if(extensionContext == null){
-			throw new GExtensionException("请先使用ExtensionContextBuiler创建一个Context");
+			throw new ExtensionException(GexExceptionContract.GEX_000017);
 		}
 		return extensionContext;
 	}

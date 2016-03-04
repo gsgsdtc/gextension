@@ -6,8 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import cn.gsgsoft.gextension.annotation.MockSPIInterface;
-
 /**
  * 扩展点的参数<p/>
  * 可以通过配置自动注入配置

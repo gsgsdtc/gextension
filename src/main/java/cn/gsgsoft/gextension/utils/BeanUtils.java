@@ -5,7 +5,8 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Locale;
 
-import cn.gsgsoft.gextension.exception.GExtensionException;
+import cn.gsgsoft.gextension.exception.ExtensionException;
+import cn.gsgsoft.gextension.exception.GexExceptionContract;
 
 public class BeanUtils {
 	
@@ -17,16 +18,16 @@ public class BeanUtils {
 	public static <T> T instantiate(Class<T> clazz)  {
 		
 		if (clazz.isInterface()) {
-			throw new GExtensionException(clazz+" 是一个接口不能实例化");
+			throw new ExtensionException(GexExceptionContract.GEX_000012,new Object[]{clazz});
 		}
 		try {
 			return clazz.newInstance();
 		}
 		catch (InstantiationException ex) {
-			throw new GExtensionException(clazz+ " 是一个虚拟方法不能实例化", ex);
+			throw new ExtensionException(GexExceptionContract.GEX_000013,new Object[]{clazz}, ex);
 		}
 		catch (IllegalAccessException ex) {
-			throw new GExtensionException(clazz+ " 没有无参的构造方法", ex);
+			throw new ExtensionException(GexExceptionContract.GEX_000014,new Object[]{clazz}, ex);
 		}
 	}
 	
@@ -59,6 +60,8 @@ public class BeanUtils {
 				 || clazz.equals(short.class)
 				 || clazz.equals(byte.class)
 				 || clazz.equals(char.class)
+				 || clazz.equals(boolean.class)
+				 || clazz.equals(float.class)
 				 || clazz.equals(double.class);
 	}
 
@@ -73,7 +76,7 @@ public class BeanUtils {
 		try {
 			clazz = Class.forName(clazzName);
 		} catch (ClassNotFoundException e) {
-			throw new GExtensionException(clazzName+ " 没有找到", e);
+			throw new ExtensionException(GexExceptionContract.GEX_000015, new Object[]{clazzName}, e);
 		}
 		return clazz;
 	}

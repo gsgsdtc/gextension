@@ -12,7 +12,8 @@ import cn.gsgsoft.gextension.annotation.SPIBean;
 import cn.gsgsoft.gextension.annotation.SPIImplBean;
 import cn.gsgsoft.gextension.annotation.SPIParamBean;
 import cn.gsgsoft.gextension.appconfig.AppConfigManager;
-import cn.gsgsoft.gextension.exception.GExtensionException;
+import cn.gsgsoft.gextension.exception.ExtensionException;
+import cn.gsgsoft.gextension.exception.GexExceptionContract;
 import cn.gsgsoft.gextension.utils.BeanUtils;
 import cn.gsgsoft.gextension.utils.ConvertUtils;
 
@@ -56,7 +57,7 @@ public class SPIExtensionLoader implements ExtensionLoader{
 		}else if(rs.size()==1){
 			return rs.iterator().next();
 		}else if(rs.size()>1){
-			throw new GExtensionException(type+"的实现不止一个，不能直接通过getExtension(Class<T> type)获取实现");
+			throw new ExtensionException(GexExceptionContract.GEX_000004,new Object[]{type});
 		}
 		return null;
 	}
@@ -88,7 +89,7 @@ public class SPIExtensionLoader implements ExtensionLoader{
 			Map<String, String> implMap = extensionConfigBean.getExtensionImpl(spiName);
 			
 			if(implMap==null || implMap.size()==0){
-				throw new GExtensionException("没有对应spiName:"+spiName+" 没有任何的实现");
+				throw new ExtensionException(GexExceptionContract.GEX_000005,new Object[]{spiName});
 			}
 			
 			Map<String, Object> implInstanceMap = new HashMap<String, Object>();
@@ -104,7 +105,7 @@ public class SPIExtensionLoader implements ExtensionLoader{
 				spiImplBean = getSPIImplBean(implClass);
 				spiBean = spiImplBean.getSpiBean();
 			}catch(Exception ex){
-				throw new GExtensionException("扩展点"+spiName+"的实现 "+implName+"的类 "+implClass+" 没有找到对应的的接口",ex);
+				throw new ExtensionException(GexExceptionContract.GEX_000006,new Object[]{spiName,implName,implClass},ex);
 			}
 			
 			String curName = null;
@@ -117,7 +118,7 @@ public class SPIExtensionLoader implements ExtensionLoader{
 						Object o =BeanUtils.instantiate(curImplClassName);
 						
 						if(o.getClass().isAssignableFrom(spiBean.getType())){
-							throw new GExtensionException("实现没有实现SPI接口");
+							throw new ExtensionException(GexExceptionContract.GEX_000007);
 						}
 						implInstanceMap.put(curName, o);
 					}
@@ -135,12 +136,12 @@ public class SPIExtensionLoader implements ExtensionLoader{
 					
 					Object o =BeanUtils.instantiate(curImplClassName);
 					if(o.getClass().isAssignableFrom(spiBean.getType())){
-						throw new GExtensionException("实现没有实现SPI接口");
+						throw new ExtensionException(GexExceptionContract.GEX_000007);
 					}
 					implInstanceMap.put(curName, o);
 				}
 			}catch(Exception ex){
-				throw new GExtensionException("扩展点"+spiName+"的实现"+curName +"的实现类"+curImplClassName+"初始化异常:"+ex.getMessage(),ex);
+				throw new ExtensionException(GexExceptionContract.GEX_000008,new Object[]{spiName,curName,curImplClassName},ex.getMessage(),ex);
 			}
 			typeMap.put(spiBean.getType(), implInstanceMap);
 		}
@@ -172,7 +173,7 @@ public class SPIExtensionLoader implements ExtensionLoader{
 						if(spiParam.isDefaultIpml()){
 							SPIBean spiBean = getSPIBean(spiParam.getValueType());
 							if(spiBean.getMultiImp()){
-								throw new GExtensionException("多实现的扩展点SPIParam.defaultIpml不允许＝true");
+								throw new ExtensionException(GexExceptionContract.GEX_000009);
 							}
 							paramValue = context.getInstance(spiParam.getValueType());
 						}else{
@@ -184,10 +185,10 @@ public class SPIExtensionLoader implements ExtensionLoader{
 					invokeMethod(spiParam.getMethod(),obj,paramValue);
 				}
 			}catch(Exception ex){
-				throw new GExtensionException("扩展点"+spiName
-						+"的实现"+implName 
-						+"的实现类"+obj.getClass()
-						+"的方法"+spiParam.getMethod().getName()+"异常:"+ex.getMessage(),ex);
+				throw new ExtensionException(GexExceptionContract.GEX_000010
+						,new Object[]{spiName,implName,obj.getClass(),spiParam.getMethod().getName()},
+						ex.getMessage(),
+						ex);
 			}
 		}
 	}
@@ -196,7 +197,7 @@ public class SPIExtensionLoader implements ExtensionLoader{
 		try {
 			method.invoke(target, value);
 		} catch (Exception e) {
-			throw new GExtensionException("对象"+target+"的方法"+method.getName()+"填入参数"+value,e);
+			throw new ExtensionException(GexExceptionContract.GEX_000011,new Object[]{target,method.getName(),value},e);
 		} 
 	}
 	

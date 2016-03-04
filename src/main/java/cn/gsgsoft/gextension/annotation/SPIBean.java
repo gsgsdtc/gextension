@@ -1,6 +1,7 @@
 package cn.gsgsoft.gextension.annotation;
 
-import cn.gsgsoft.gextension.exception.GExtensionException;
+import cn.gsgsoft.gextension.exception.ExtensionException;
+import cn.gsgsoft.gextension.exception.GexExceptionContract;
 import cn.gsgsoft.gextension.utils.AnnotationUtils;
 
 /**
@@ -34,7 +35,7 @@ public class SPIBean {
 		this.type=type;
 		SPI spi = AnnotationUtils.getAnnotation(type, SPI.class);
 		if(spi==null){
-			throw new GExtensionException(type+"没有配置SPI的annotation");
+			throw new ExtensionException(GexExceptionContract.GEX_000001,new Object[]{type});
 		}
 		parse(spi);
 	}

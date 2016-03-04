@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import cn.gsgsoft.gextension.exception.GExtensionException;
+import cn.gsgsoft.gextension.exception.ExtensionException;
+import cn.gsgsoft.gextension.exception.GexExceptionContract;
 import cn.gsgsoft.gextension.utils.PropertiesLoaderUtils;
 
 /**
@@ -83,7 +84,7 @@ public class SpiExtensionConfigBean {
 				pmap.put(in, c);
 			}
 		}catch(IOException ex ){
-			throw new GExtensionException("配置文件加载异常"+ex.getMessage(),ex);
+			throw new ExtensionException(GexExceptionContract.GEX_000003,ex);
 		}
 	}
 	

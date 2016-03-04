@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import cn.gsgsoft.gextension.logger.Logger;
+import cn.gsgsoft.gextension.logger.LoggerFactory;
+
 /**
  * 扩展点的context，通过context可以获得所有的扩展点的实现
  * @author guosg
@@ -11,7 +14,7 @@ import java.util.List;
  */
 public class ExtensionContext {
 	private List<ExtensionLoader> lis = new ArrayList<ExtensionLoader>();
-	
+	private static final Logger logger = LoggerFactory.getLogger(ExtensionContext.class);
 	public void addExtensionLoader(ExtensionLoader loader){
 		lis.add(loader);
 	}
@@ -20,6 +23,9 @@ public class ExtensionContext {
 	 * 初始化方法
 	 */
 	public void initialize(){
+		if(logger.isInfoEnabled()){
+			logger.info("初始化ExtensionContext");
+		}
 		for(ExtensionLoader loader : lis){
 			loader.setExtensionContext(this);
 			loader.instantiate();
@@ -38,6 +44,9 @@ public class ExtensionContext {
 	 * 销毁
 	 */
 	public void destroy(){
+		if(logger.isInfoEnabled()){
+			logger.info("销毁ExtensionContext");
+		}
 		for(ExtensionLoader loader : lis){
 			loader.destroy();
 		}
