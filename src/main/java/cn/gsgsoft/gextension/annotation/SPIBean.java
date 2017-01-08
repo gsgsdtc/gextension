@@ -5,7 +5,7 @@ import cn.gsgsoft.gextension.exception.GexExceptionContract;
 import cn.gsgsoft.gextension.utils.AnnotationUtils;
 
 /**
- * 将spi annation解析成一个可读的
+ * 将spi annation解析成一个可读的对象
  * @author guosg
  *
  */

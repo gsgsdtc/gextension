@@ -3,7 +3,9 @@ package cn.gsgsoft.gextension.appconfig;
 import java.util.Properties;
 
 /**
- * 应用配置管理器
+ * <p>应用配置管理器<p>
+ * 
+ * 
  * @author guosg
  *
  */

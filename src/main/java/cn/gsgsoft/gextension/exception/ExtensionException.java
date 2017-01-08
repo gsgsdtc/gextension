@@ -12,7 +12,6 @@ public class ExtensionException extends RuntimeException {
 
 	private String code; // 异常代码
 
-	
 	/**
 	 * 构造一个异常信息
 	 * @param errCode 异常代码
@@ -57,6 +56,18 @@ public class ExtensionException extends RuntimeException {
 	 */
 	public ExtensionException(String errCode, String message, Throwable cause) {
 		this(errCode, null, message, cause);
+	}
+	
+	/**
+	 * 构造一个异常信息，这个构造的Exception将不会将errCode转成消息。
+	 * @param errCode 异常代码
+	 * @param message 异常信息
+	 * @param cause 异常来源
+	 * @param getMsg 
+	 */
+	public ExtensionException(String errCode, String message, Throwable cause,boolean getMsg) {
+		super(message,cause);
+		code=errCode;
 	}
 	
 	
@@ -107,7 +118,4 @@ public class ExtensionException extends RuntimeException {
 	public void setCode(String code) {
 		this.code = code;
 	}
-
-	
-	
 }

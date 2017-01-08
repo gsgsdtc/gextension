@@ -14,12 +14,14 @@ import cn.gsgsoft.gextension.utils.AnnotationUtils;
 public class SPIImplBean {
 	private SPIBean spiBean;
 	private List<SPIParamBean> params=new ArrayList<SPIParamBean>();
+	private Class<?> implClass;
 	
 	/**
 	 * 
 	 * @param type spi的实现类
 	 */
 	public SPIImplBean(Class<?> type){
+		this.implClass=type;
 		parse(type);
 	}
 	
@@ -79,6 +81,14 @@ public class SPIImplBean {
 
 	public void setParams(List<SPIParamBean> params) {
 		this.params = params;
+	}
+
+	public Class<?> getImplClass() {
+		return implClass;
+	}
+
+	public void setImplClass(Class<?> implClass) {
+		this.implClass = implClass;
 	}
 	
 	

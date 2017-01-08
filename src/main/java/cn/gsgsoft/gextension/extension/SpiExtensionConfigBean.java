@@ -1,4 +1,4 @@
-package cn.gsgsoft.gextension.spi;
+package cn.gsgsoft.gextension.extension;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -18,7 +18,7 @@ import cn.gsgsoft.gextension.utils.PropertiesLoaderUtils;
  * @author guosg
  *
  */
-public class SpiExtensionConfigBean {
+public class SpiExtensionConfigBean implements SpiConfigBean {
 	
 	public static final String extension_config_dic="META-INF/extension/";
 	private Properties props = new Properties();
@@ -35,27 +35,21 @@ public class SpiExtensionConfigBean {
 	}
 	
 	
-	/**
-	 * 获得扩展点名称下的所有的实现
-	 * @param spiName 扩展点的名称
-	 * @return 获得 key=实现的名称 value=实现的类名
+	/* (non-Javadoc)
+	 * @see cn.gsgsoft.gextension.spi.SpiConfigBean#getExtensionImpl(java.lang.String)
 	 */
 	public Map<String, String> getExtensionImpl(String spiName){
 		return extensionMap.get(spiName);
 	}
-	/**
-	 * 获得所有的扩展点的名称
-	 * @return
+	/* (non-Javadoc)
+	 * @see cn.gsgsoft.gextension.spi.SpiConfigBean#getSpiNames()
 	 */
 	public Collection<String> getSpiNames(){
 		return extensionMap.keySet();
 	}
 	
-	/**
-	 * 获得扩展的实现
-	 * @param spiName	扩展点的名称
-	 * @param implName	扩展点的实现
-	 * @return
+	/* (non-Javadoc)
+	 * @see cn.gsgsoft.gextension.spi.SpiConfigBean#getExtensionImpl(java.lang.String, java.lang.String)
 	 */
 	public String getExtensionImpl(String spiName,String implName){
 		Map<String, String> im = extensionMap.get(spiName);
@@ -94,7 +88,7 @@ public class SpiExtensionConfigBean {
 	 * 获得一个单例的对象
 	 * @return
 	 */
-	public static SpiExtensionConfigBean getInstance(){
+	public static SpiConfigBean getInstance(){
 		if(loader==null){
 			instantiate();
 		}

@@ -1,4 +1,4 @@
-package cn.gsgsoft.gextension.spi;
+package cn.gsgsoft.gextension.extension;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -18,21 +18,37 @@ import cn.gsgsoft.gextension.utils.BeanUtils;
 import cn.gsgsoft.gextension.utils.ConvertUtils;
 
 /**
- * spi扩展点加载器
+ * ExtensionLoader的模版实现
  * @author guosg
  *
  */
-public class SPIExtensionLoader implements ExtensionLoader{
-	private AppConfigManager appConfigManager ;
-	private SpiExtensionConfigBean extensionConfigBean = null;
-	private Map<Class<?>, SPIBean> spiBeanMap = new ConcurrentHashMap<Class<?>, SPIBean>();
-	private Map<Class<?>, SPIImplBean> spiImplBeanMap = new ConcurrentHashMap<Class<?>, SPIImplBean>();
+public abstract class AbstractExtensionLoader implements ExtensionLoader{
 	private ExtensionContext context = null;
+	
+	private AppConfigManager appConfigManager ;
+	
+	private SpiConfigBean extensionConfigBean = null;
+	
+	/**
+	 * 缓存SPIBean
+	 */
+	private Map<Class<?>, SPIBean> spiBeanMap = new ConcurrentHashMap<Class<?>, SPIBean>();
+	
+	/**
+	 * 缓存spiImplBean
+	 */
+	private Map<Class<?>, SPIImplBean> spiImplBeanMap = new ConcurrentHashMap<Class<?>, SPIImplBean>();
+	
 	Map<Class<?>, Map<String,Object> > typeMap = new ConcurrentHashMap<Class<?>,Map<String,Object>>();
 	
-	public SPIExtensionLoader(AppConfigManager appConfigManager){
+	public AbstractExtensionLoader(AppConfigManager appConfigManager,ExtensionContext context){
+		this(appConfigManager,SpiExtensionConfigBean.getInstance(),context);
+	}
+	
+	public AbstractExtensionLoader(AppConfigManager appConfigManager,SpiConfigBean extensionConfigBean,ExtensionContext context){
 		this.appConfigManager = appConfigManager;
-		extensionConfigBean = SpiExtensionConfigBean.getInstance();
+		this.extensionConfigBean = extensionConfigBean;
+		this.context = context;
 	}
 	
 	/**
@@ -80,11 +96,13 @@ public class SPIExtensionLoader implements ExtensionLoader{
 	}
 	
 	/**
-	 * 实例化所有的
+	 * <p>实例化spi实现</p>
+	 * spi的实现可以配置多实现和单实现
+	 * 
 	 */
 	public void instantiate() {
+		//获得系统中的所有的扩展点名称
 		Collection<String> spiNames = extensionConfigBean.getSpiNames();
-		
 		for(String spiName : spiNames){
 			Map<String, String> implMap = extensionConfigBean.getExtensionImpl(spiName);
 			
@@ -92,49 +110,44 @@ public class SPIExtensionLoader implements ExtensionLoader{
 				throw new ExtensionException(GexExceptionContract.GEX_000005,new Object[]{spiName});
 			}
 			
-			Map<String, Object> implInstanceMap = new HashMap<String, Object>();
-			
+			//获得一个spiBean,并判断是否有相应的实现
 			Map.Entry<String, String> tentry = implMap.entrySet().iterator().next();
 			String implClassName = tentry.getValue();
 			String implName = tentry.getKey();
 			SPIImplBean spiImplBean = null;
 			SPIBean spiBean = null;
-			Class<?> implClass = null;
 			try{
-				implClass = BeanUtils.classForName(implClassName);
-				spiImplBean = getSPIImplBean(implClass);
+				spiImplBean = getSPIImplBean(implClassName);
 				spiBean = spiImplBean.getSpiBean();
 			}catch(Exception ex){
-				throw new ExtensionException(GexExceptionContract.GEX_000006,new Object[]{spiName,implName,implClass},ex);
+				throw new ExtensionException(GexExceptionContract.GEX_000006,new Object[]{spiName,implName,implClassName},ex);
 			}
 			
+			Map<String, Object> implInstanceMap = new HashMap<String, Object>();
 			String curName = null;
 			String curImplClassName = null;
 			try{
+				//对多实现进行实例化
 				if(spiBean.getMultiImp()){
 					for(Map.Entry<String, String> entry : implMap.entrySet()){
 						curName = entry.getKey();
 						curImplClassName = entry.getValue();
-						Object o =BeanUtils.instantiate(curImplClassName);
-						
+						spiImplBean = getSPIImplBean(implClassName);
+						Object o = doInstantiate(spiImplBean);
 						if(o.getClass().isAssignableFrom(spiBean.getType())){
 							throw new ExtensionException(GexExceptionContract.GEX_000007);
 						}
 						implInstanceMap.put(curName, o);
 					}
 				}else{
-					curName = appConfigManager.getValue(spiName);
-					if(curName==null || "".equals(curName)){
-						curName = spiBean.getDef();
-					}
-					
+					//实例化但实现
+					curName = findSpiImplName(spiBean);
 					curImplClassName = implMap.get(curName);
-					
 					if(curImplClassName==null || curImplClassName.length()==0){
 						throw new NullPointerException("实现类为空");
 					}
-					
-					Object o =BeanUtils.instantiate(curImplClassName);
+					spiImplBean = getSPIImplBean(implClassName);
+					Object o = doInstantiate(spiImplBean);
 					if(o.getClass().isAssignableFrom(spiBean.getType())){
 						throw new ExtensionException(GexExceptionContract.GEX_000007);
 					}
@@ -145,7 +158,68 @@ public class SPIExtensionLoader implements ExtensionLoader{
 			}
 			typeMap.put(spiBean.getType(), implInstanceMap);
 		}
-		
+	}
+	
+	/**
+	 * 对一个SPIImplBean进行实例化
+	 * @param spiImplBean
+	 * @return
+	 */
+	protected abstract Object doInstantiate(SPIImplBean spiImplBean);
+	
+	/**
+	 * <p>查找当前spi接口的实现名称</p>
+	 * 在appconfig中没有进行实现配置时，将使用spiBean.getDef()获得的实现名称
+	 * <p>
+	 * @param spiBean spi接口的配置
+	 * @return
+	 */
+	protected String findSpiImplName(SPIBean spiBean){
+		String curName = appConfigManager.getValue(spiBean.getName());
+		if(curName==null || "".equals(curName)){
+			curName = spiBean.getDef();
+		}
+		return curName;
+	}
+	
+	/**
+	 * <p>获得一个实现类的SPIImplBean</p>
+	 * @param implClassName 实现的类名
+	 * @return
+	 */
+	protected SPIImplBean getSPIImplBean(String implClassName){
+		Class<?> type = BeanUtils.classForName(implClassName);
+		return getSPIImplBean(type);
+	}
+	
+	/**
+	 * <p>获得一个实现类的SPIImplBean</p>
+	 * @param type 实现的类
+	 * @return
+	 */
+	protected SPIImplBean getSPIImplBean(Class<?> type){
+		SPIImplBean bean =  spiImplBeanMap.get(type);
+		if(bean == null){
+			bean = new SPIImplBean(type);
+			spiImplBeanMap.put(type, bean);
+		}
+		return bean;
+	}
+
+	public AppConfigManager getAppConfigManager() {
+		return appConfigManager;
+	}
+
+	public void setAppConfigManager(AppConfigManager appConfigManager) {
+		this.appConfigManager = appConfigManager;
+	}
+
+	public SpiConfigBean getExtensionConfigBean() {
+		return extensionConfigBean;
+	}
+
+	public void setExtensionConfigBean(SpiConfigBean extensionConfigBean) {
+		this.extensionConfigBean = extensionConfigBean;
 	}
 	
 	/**
@@ -211,15 +285,6 @@ public class SPIExtensionLoader implements ExtensionLoader{
 		return bean;
 	}
 	
-	public SPIImplBean getSPIImplBean(Class<?> type){
-		SPIImplBean bean =  spiImplBeanMap.get(type);
-		if(bean == null){
-			bean = new SPIImplBean(type);
-			spiImplBeanMap.put(type, bean);
-		}
-		return bean;
-	}
-	
 	public void fillParams() {
 		for(Map.Entry<Class<?>,Map<String, Object>> entry : typeMap.entrySet()){
 			Class<?> type = entry.getKey();
@@ -237,7 +302,15 @@ public class SPIExtensionLoader implements ExtensionLoader{
 	public void setExtensionContext(ExtensionContext context) {
 		this.context = context;
 	}
-
+	
+	public ExtensionContext getExtensionContext(){
+		return this.context;
+	}
+	
+	/**
+	 * 初始化所有的实现<p>
+	 * 此时所有的实现以及进行了依赖注入
+	 */
 	public void initialize() {
 		for(Map.Entry<Class<?>,Map<String, Object>> entry : typeMap.entrySet()){
 			for(Map.Entry<String, Object> implEntry : entry.getValue().entrySet()){
@@ -263,7 +336,5 @@ public class SPIExtensionLoader implements ExtensionLoader{
 		}
 		
 	}
-
 	
-
 }

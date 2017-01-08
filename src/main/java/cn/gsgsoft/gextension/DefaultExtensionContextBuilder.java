@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.gsgsoft.gextension.appconfig.PropertiesAppConfigManager;
-import cn.gsgsoft.gextension.spi.SPIExtensionLoader;
+import cn.gsgsoft.gextension.extension.SPIExtensionLoader;
 import cn.gsgsoft.gextension.utils.ExtensionContextUtils;
 
 /**
@@ -15,13 +15,15 @@ import cn.gsgsoft.gextension.utils.ExtensionContextUtils;
  * @author guosg
  *
  */
-public class ExtensionContextBuilder {
+public class DefaultExtensionContextBuilder {
 	private List<SPIExtensionLoader> loaders = new ArrayList<SPIExtensionLoader>();
 	
-	public ExtensionContext build(){
-		ExtensionContext extensionContext = new ExtensionContext();
-		SPIExtensionLoader loader = new SPIExtensionLoader(PropertiesAppConfigManager.getInstance());
+	public DefaultExtensionContext build(){
+		DefaultExtensionContext extensionContext = new DefaultExtensionContext();
+		SPIExtensionLoader loader = new SPIExtensionLoader(new PropertiesAppConfigManager(),extensionContext);
 		extensionContext.addExtensionLoader(loader);
+		loader.instantiate();
+		loader.fillParams();
 		extensionContext.initialize();
 		ExtensionContextUtils.setExtensionLoader(extensionContext);
 		return extensionContext;

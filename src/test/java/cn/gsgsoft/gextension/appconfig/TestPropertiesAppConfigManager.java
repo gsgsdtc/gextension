@@ -1,4 +1,4 @@
-package cn.gsgsoft.gextension.config;
+package cn.gsgsoft.gextension.appconfig;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +15,7 @@ public class TestPropertiesAppConfigManager {
 	
 	@Test
 	public void test(){
-		PropertiesAppConfigManager m = PropertiesAppConfigManager.getInstance();
+		PropertiesAppConfigManager m =new PropertiesAppConfigManager();
 		Assert.assertEquals("impl", m.getValue("gextension.mock.properties_load"));
 	}
 }

@@ -1,4 +1,4 @@
-package cn.gsgsoft.gextension.spi;
+package cn.gsgsoft.gextension.extension;
 
 import cn.gsgsoft.gextension.ExtensionContext;
 

@@ -9,6 +9,9 @@ import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * properties加载工具类
@@ -16,6 +19,7 @@ import java.util.Properties;
  *
  */
 public class PropertiesLoaderUtils {
+	private static final Logger logger = LoggerFactory.getLogger(PropertiesLoaderUtils.class);
 	/**
 	 * Load all properties from the specified class path resource
 	 * (in ISO-8859-1 encoding), using the given class loader.
@@ -35,9 +39,13 @@ public class PropertiesLoaderUtils {
 		Properties props = new Properties();
 		Enumeration<URL> urls = clToUse.getResources(resourceName);
 		while (urls.hasMoreElements()) {
+			
 			URL url = (URL) urls.nextElement();
 			URLConnection con = url.openConnection();
 			InputStream is = con.getInputStream();
+			if(logger.isDebugEnabled()){
+				logger.debug("加载配置文件"+url.toString());
+			}
 			try {
 				
 				props.load(is);

@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Properties;
 
-import cn.gsgsoft.gextension.logger.Logger;
-import cn.gsgsoft.gextension.logger.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cn.gsgsoft.gextension.utils.PropertiesLoaderUtils;
 
 
@@ -55,7 +56,8 @@ public class ExceptionMessageHelper {
 			 msg = new
 			 String(getProperties().getProperty(code));
 		} catch (Exception e) {
-			throw new RuntimeException(code+":异常代码查找出现异常"+e.getMessage(), e);
+			logger.error("获取异常码"+code+"异常："+e.getMessage(),e);
+			msg = code+":为定义异常码";
 		} 
 		return msg;
 	}

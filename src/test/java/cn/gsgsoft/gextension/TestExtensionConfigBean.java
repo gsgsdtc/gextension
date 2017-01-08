@@ -6,7 +6,8 @@ import java.util.Properties;
 import org.junit.Assert;
 import org.junit.Test;
 
-import cn.gsgsoft.gextension.spi.SpiExtensionConfigBean;
+import cn.gsgsoft.gextension.extension.SpiConfigBean;
+import cn.gsgsoft.gextension.extension.SpiExtensionConfigBean;
 import cn.gsgsoft.gextension.utils.PropertiesLoaderUtils;
 
 /**
@@ -21,7 +22,7 @@ public class TestExtensionConfigBean {
 	 */
 	@Test
 	public void test(){
-		SpiExtensionConfigBean bean = SpiExtensionConfigBean.getInstance();
+		SpiConfigBean bean = SpiExtensionConfigBean.getInstance();
 		Assert.assertEquals("cn.gsgsoft.gextension.appconfig.PropertiesAppConfigLoader", bean.getExtensionImpl("gextension.appconfig.loader", "properties"));
 	}
 	

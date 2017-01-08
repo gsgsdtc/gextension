@@ -1,4 +1,4 @@
-package cn.gsgsoft.gextension.spi;
+package cn.gsgsoft.gextension.extension;
 
 /**
  * 需要进行初始化的接口

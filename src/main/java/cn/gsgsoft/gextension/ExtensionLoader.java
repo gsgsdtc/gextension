@@ -33,6 +33,7 @@ public interface ExtensionLoader{
 	
 	/**
 	 * 初始化方法
+	 * 此时所有的实现以及进行了依赖注入
 	 */
 	public void initialize();
 	

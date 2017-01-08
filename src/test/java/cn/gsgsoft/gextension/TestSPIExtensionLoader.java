@@ -5,10 +5,10 @@ import java.math.BigDecimal;
 import org.junit.Assert;
 import org.junit.Test;
 
-import cn.gsgsoft.gextension.ExtensionContext;
+import cn.gsgsoft.gextension.DefaultExtensionContext;
 import cn.gsgsoft.gextension.ExtensionLoader;
 import cn.gsgsoft.gextension.appconfig.PropertiesAppConfigManager;
-import cn.gsgsoft.gextension.spi.SPIExtensionLoader;
+import cn.gsgsoft.gextension.extension.SPIExtensionLoader;
 
 /**
  * 
@@ -19,8 +19,8 @@ public class TestSPIExtensionLoader {
 	
 	@Test
 	public void test(){
-		SPIExtensionLoader loader = new SPIExtensionLoader(PropertiesAppConfigManager.getInstance());
-		ExtensionContext context = new ExtensionContext();
+		DefaultExtensionContext context = new DefaultExtensionContext();
+		SPIExtensionLoader loader = new SPIExtensionLoader(new PropertiesAppConfigManager(),context);
 		context.addExtensionLoader(loader);
 		loader.setExtensionContext(context);
 		loader.instantiate();
@@ -35,8 +35,8 @@ public class TestSPIExtensionLoader {
 	
 	@Test
 	public void testMultiImpl(){
-		SPIExtensionLoader loader = new SPIExtensionLoader(PropertiesAppConfigManager.getInstance());
-		ExtensionContext context = new ExtensionContext();
+		DefaultExtensionContext context = new DefaultExtensionContext();
+		SPIExtensionLoader loader = new SPIExtensionLoader(new PropertiesAppConfigManager(),context);
 		context.addExtensionLoader(loader);
 		loader.setExtensionContext(context);
 		loader.instantiate();
